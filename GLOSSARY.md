@@ -28,14 +28,8 @@ A Purchase a Team Admin makes for others. It grants Seats, not the course itself
 _Avoid_: Team purchase, Bulk purchase
 
 **Seat**:
-One place on a Team Licence that a learner can claim to get the course.
+One place on a Team Licence that a learner can claim to get the course. A Seat is an **Unclaimed Seat** until a learner claims it, and then a **Claimed Seat**, which belongs to that learner. A Team Licence with any Claimed Seat can't be refunded.
 _Avoid_: Coupon, Code, Voucher
-
-**Unclaimed Seat**:
-A Seat no learner has claimed yet.
-
-**Claimed Seat**:
-A Seat a learner has claimed. It belongs to that learner, so a Team Licence with any Claimed Seat can't be refunded.
 
 ### Refunds
 
@@ -68,46 +62,10 @@ _Avoid_: Completed, Paid out
 **Failed Refund**:
 A Refund where the money couldn't be sent. The Refund Request stays approved, because the decision hasn't changed.
 
-### Other terms
+**Watched**:
+Seconds of video a learner has reached in a course: the furthest point reached in each lesson, added up. Not lessons opened. It belongs to the learner and the course, not to any one Purchase.
+_Avoid_: Viewed, Progress
 
 **Watch Limit**:
-A Refund is only offered on a course with under two hours watched. Past that, the Learner has had the course, and the refund form turns them away.
+The Watched time at which a buyer can no longer raise a Refund Request for an Individual Purchase. Past it, the learner has had the course.
 _Avoid_: Watch cap, Viewing threshold
-
-**Refunds table**:
-`refunds` — one row per Refund. Columns: `id`, `purchase_id`, `status` (`open`, `approved`, `declined`), `reason`, `amount_refunded`, `requested_at`, `resolved_at`, `resolved_by_user_id`, `decision_note`.
-
-**refunded_at**:
-Nullable text column on `coupons`. An ISO timestamp, set on every unclaimed coupon when its team purchase is refunded. `getSeatAvailability` returns `"refunded"` for it.
-
-**resolved_by_user_id**:
-Integer column on `refunds`, referencing `users.id`. Null until an Admin approves or declines the Refund.
-
-**RefundRequestCard**:
-The component that draws one Refund Request on `/admin/refunds`, with its Approve and Decline buttons.
-
-**Button**:
-A clickable element that fires an action when the user presses it. Built on `~/components/ui/button`.
-
-**Component**:
-A React function that returns JSX.
-
-**cwd**:
-The directory the dev server was started from. Paths in `scripts/` resolve from here.
-
-**Loader**:
-The React Router function that fetches a route's data on the server before the page renders.
-
-**Slug**:
-The URL-safe name of a course, as in `/courses/:slug`.
-
-**Lapsed**:
-An Enrollment that is no longer active. Shown as a badge on the instructor's student roster.
-
-**Instructor**:
-Speaks for their own courses only. An Instructor builds and edits the courses they own, and sees the learners enrolled on them.
-_Avoid_: Teacher, Author, Creator
-
-**Watched**:
-Seconds of video a Learner has actually played in a course: the furthest point reached in each lesson, added up. Not lessons opened.
-_Avoid_: Viewed, Progress

@@ -225,6 +225,20 @@ describe("raising a Refund Request", () => {
     );
   });
 
+  it("lets a buyer who has watched just under two hours ask", () => {
+    const purchase = buyForSelf(base.user.id);
+    db.insert(schema.videoWatchEvents)
+      .values([
+        { userId: base.user.id, lessonId: lessonIds[0], eventType: "progress", positionSeconds: 3600 },
+        { userId: base.user.id, lessonId: lessonIds[1], eventType: "progress", positionSeconds: 3599 },
+      ])
+      .run();
+
+    expect(checkRefundRequest(db, purchase.id, base.user.id, NOW)).toMatchObject(
+      { ok: true }
+    );
+  });
+
   it("refuses a Team Licence with a Claimed Seat", () => {
     const teamAdmin = addLearner("Priya");
     const { purchase, seats } = buySeats(teamAdmin.id, 3);
