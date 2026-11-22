@@ -55,6 +55,8 @@ import { data, isRouteErrorResponse } from "react-router";
 import { z } from "zod";
 import { COUNTRIES } from "~/lib/ppp";
 import { parseFormData, parseParams } from "~/lib/validation";
+import { notifyDiscussionReply } from "~/lib/PROTOTYPE-knock.server"; // PROTOTYPE
+
 
 const lessonParamsSchema = z.object({
   slug: z.string().min(1),
@@ -900,12 +902,19 @@ export async function action({ params, request }: Route.ActionArgs) {
         if (!parsed.success) {
           return { ok: false, error: "Enter a comment before posting." };
         }
-        createComment(
+        const created = createComment(
           currentUserId,
           lessonId,
           parsed.data.parentId ?? null,
           parsed.data.body
         );
+        // PROTOTYPE — Knock spike. Fire-and-log; never merge.
+        if (created.parentId !== null) {
+          notifyDiscussionReply(created.id).then(
+            (r) => console.log("[knock] discussion-reply", r),
+            (e) => console.error("[knock] discussion-reply failed", e?.error ?? e)
+          );
+        }
         return { ok: true };
       }
 
